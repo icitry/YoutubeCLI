@@ -10,9 +10,9 @@ from service.youtube import YoutubeConnectionManager
 
 
 class ServiceLocator:
-    def __init__(self, char_aspect_ratio):
+    def __init__(self, char_aspect_ratio, should_use_colors):
         self._display_manager = DisplayManager()
-        self._video_rendering_manager = VideoRenderingManager(char_aspect_ratio)
+        self._video_rendering_manager = VideoRenderingManager(char_aspect_ratio, should_use_colors)
         self._video_stream_manager = VideoStreamManager()
         self._video_subtitles_manager = VideoSubtitlesManager()
         self._auth_manager = AuthManager()

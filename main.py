@@ -10,7 +10,7 @@ def main():
                         help="Scaling factor relative to the CLI dimensions.",
                         type=float,
                         default=1.)
-    parser.add_argument('--char-ratio', '-c',
+    parser.add_argument('--char-ratio', '-r',
                         help="CLI characters aspect ratio.",
                         type=float,
                         default=.6)
@@ -35,9 +35,13 @@ def main():
                         type=str,
                         default='en'
                         )
+    parser.add_argument('--colors', '-c',
+                        help="Use colors when rendering. *Warning: Performance-heavy.",
+                        action='store_true'
+                        )
     args = parser.parse_args()
 
-    service_locator = ServiceLocator(args.char_ratio)
+    service_locator = ServiceLocator(args.char_ratio, args.colors)
     cli_manager = CliManager(service_locator, args.scaling_factor, args.max_width, args.subtitles, args.subtitles_lang)
 
     try:

@@ -4,8 +4,8 @@ from service.render.AsciiFrameConverterUtil import AsciiFrameConverterUtil
 
 
 class VideoRenderingManager:
-    def __init__(self, char_aspect_ratio):
-        self._ascii_frame_converter_util = AsciiFrameConverterUtil(char_aspect_ratio)
+    def __init__(self, char_aspect_ratio, should_use_colors):
+        self._ascii_frame_converter_util = AsciiFrameConverterUtil(char_aspect_ratio, should_use_colors)
 
         self._display_callback = None
         self._subtitles_callback = None
