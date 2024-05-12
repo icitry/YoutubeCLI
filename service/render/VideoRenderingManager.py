@@ -8,6 +8,7 @@ class VideoRenderingManager:
         self._ascii_frame_converter_util = AsciiFrameConverterUtil(char_aspect_ratio)
 
         self._display_callback = None
+        self._subtitles_callback = None
 
         self._cli_cols = 0
         self._cli_rows = 0
@@ -28,6 +29,7 @@ class VideoRenderingManager:
 
     def init_state(self, state_data):
         self._display_callback = state_data['display_callback']
+        self._subtitles_callback = state_data['subtitles_callback']
 
         target_fps = state_data['target_fps']
 
@@ -57,7 +59,9 @@ class VideoRenderingManager:
 
         percent_watched = frame_count / self._total_frames
 
-        self._display_callback({
+        subtitles = self._subtitles_callback(percent_watched)
+
+        args = {
             'screen_width': display_frame_data['width'],
             'frame_data': display_frame_data,
             'video_title': self._video_title,
@@ -66,7 +70,14 @@ class VideoRenderingManager:
             'video_creator': self._video_creator,
             'percent_watched': percent_watched,
             'is_playing': self._is_video_playing
-        })
+        }
+
+        if len(subtitles) > 0:
+            args |= {
+                'subtitles': subtitles
+            }
+
+        self._display_callback(args)
 
     def update_cli_dimensions(self, cols, rows):
         self._cli_cols = cols

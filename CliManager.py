@@ -96,11 +96,19 @@ class CliInputs(Enum):
 
 
 class CliManager:
-    def __init__(self, service_locator: ServiceLocator, scaling_factor, max_frame_width):
+    def __init__(self,
+                 service_locator: ServiceLocator,
+                 scaling_factor,
+                 max_frame_width,
+                 should_use_subtitles,
+                 subtitles_lang):
         self._service_locator = service_locator
 
         self._scaling_factor = scaling_factor
         self._max_frame_width = max_frame_width
+
+        self._should_use_subtitles = should_use_subtitles
+        self._subtitles_lang = subtitles_lang
 
         self._current_video_id = None
         self._current_video_creator_id = None
@@ -196,10 +204,13 @@ class CliManager:
             self._service_locator.display_manager.set_active_screen(ScreenTags.VIDEO)
 
             current_video_metadata = self._service_locator.video_stream_manager.get_video_metadata(
-                video_url=screen_data['video_url'])
+                screen_data['video_url'], self._should_use_subtitles, self._subtitles_lang)
 
             self._current_video_id = current_video_metadata['id']
             self._current_video_creator_id = current_video_metadata['creator_id']
+
+            self._service_locator.video_subtitles_manager.set_subtitles_resource(
+                current_video_metadata['subtitles'], current_video_metadata['duration'])
 
             if self._service_locator.auth_manager.is_authenticated():
                 self._current_video_rating = self._service_locator.youtube_connection_manager.get_video_rating(
@@ -209,6 +220,7 @@ class CliManager:
 
             self._service_locator.video_rendering_manager.init_state({
                 'display_callback': self._service_locator.display_manager.render_screen,
+                'subtitles_callback': self._service_locator.video_subtitles_manager.current_subtitle,
                 'target_fps': current_video_metadata['target_fps'],
                 'scaling_factor': self._scaling_factor,
                 'max_frame_width': self._max_frame_width,
@@ -473,4 +485,3 @@ class CliManager:
                 YoutubeResultNav.CURRENT)
             screen_data['is_subscribed'] = self._current_creator_subscription_status
             self._display_current_screen(screen_data)
-

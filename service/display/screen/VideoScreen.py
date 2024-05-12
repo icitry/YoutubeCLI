@@ -1,5 +1,5 @@
 from service.display.screen import BaseScreen
-from util import get_ellipsized_str, create_video_metadata_str
+from util import get_ellipsized_str, create_video_metadata_str, str_to_lines
 
 
 class VideoScreen(BaseScreen):
@@ -32,6 +32,7 @@ class VideoScreen(BaseScreen):
         video_views = data['video_views']
         video_creator = data['video_creator']
         rating = data['rating']
+        subtitles = data.get('subtitles', None)
 
         if rating == 'like':
             rating = 'L'
@@ -46,6 +47,10 @@ class VideoScreen(BaseScreen):
         render_str += frame_data['content']
 
         if frame_data['width'] > 5:
+            # Add current subtitles.
+            if subtitles is not None:
+                render_str += str_to_lines(subtitles, screen_width)
+
             # Add playback bar and status.
             render_str += self._create_video_status_bar(screen_width, percent_watched, is_playing)
 

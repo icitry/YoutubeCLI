@@ -67,12 +67,14 @@ class VideoStreamManager:
         def error(self, msg):
             pass
 
+    _subtitles_format = 'vtt'
+
     _yt_dl_opts = {
         'quiet': True,
         'logger': FakeLogger(),
         'retries': 99,
         'noprogress': True,
-        'format': 'worst',
+        'format': 'worst'
     }
 
     def __init__(self):
@@ -82,9 +84,33 @@ class VideoStreamManager:
 
         self._is_playing = False
 
-    def get_video_metadata(self, video_url):
-        ytdl = yt_dlp.YoutubeDL(self._yt_dl_opts)
+    def get_video_metadata(self, video_url, should_use_subtitles, subtitles_lang):
+        subtitles_options = dict()
+        if should_use_subtitles:
+            subtitles_options |= {
+                'writesubtitles': False,
+                'subtitleslangs': [subtitles_lang],
+            }
+
+        ytdl = yt_dlp.YoutubeDL(self._yt_dl_opts | subtitles_options)
         video_info = ytdl.extract_info(video_url, download=False)
+
+        subtitles = None
+
+        if should_use_subtitles:
+            if 'subtitles' in video_info:
+                for lang in subtitles_options['subtitleslangs']:
+                    if lang in video_info['subtitles']:
+                        for subtitle in video_info['subtitles'][lang]:
+                            if subtitle['ext'] == self._subtitles_format:
+                                subtitles = subtitle
+                                break
+
+                if not subtitles:
+                    for subtitle in video_info.get('automatic_captions', {}).get(subtitles_lang, []):
+                        if subtitle['ext'] == self._subtitles_format:
+                            subtitles = subtitle
+                            break
 
         return {
             'id': video_info['id'],
@@ -97,6 +123,7 @@ class VideoStreamManager:
             'creator': video_info['uploader'],
             'creator_id': video_info['channel_id'],
             'view_count': get_abbreviated_view_count(video_info['view_count']),
+            'subtitles': subtitles
         }
 
     def parse_video_stream(self, stream_url, frame_callback):

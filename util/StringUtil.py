@@ -11,30 +11,50 @@ def get_menu_item_str(title: str):
     return f'[{title[0].upper()}]{title[1:].lower()}'
 
 
-def str_list_to_lines(str_list: list[str], max_line_width: int):
+def str_list_to_lines(str_list: list[str], max_line_width: int, center_text=False):
     lines = list()
     current_line = ''
     for word in str_list:
         if len(current_line) + len(word) > max_line_width:
             current_line = current_line.rstrip()
-            lines.append(f"{current_line}{' ' * (max_line_width - len(current_line))}")
+            total_padding = max_line_width - len(current_line)
+            if center_text:
+                padding = int(total_padding / 2)
+                lines.append(f"{' ' * padding}{current_line}{' ' * (total_padding - padding)}")
+            else:
+                lines.append(f"{current_line}{' ' * total_padding}")
             current_line = ''
 
         if len(word) > max_line_width:
             for i in range(0, len(word), max_line_width):
                 line = word[i:i + max_line_width]
-                line = f"{line}{' ' * (max_line_width - len(line))}"
+                total_padding = max_line_width - len(line)
+                if center_text:
+                    padding = int(total_padding / 2)
+                    line = f"{' ' * padding}{line}{' ' * padding}"
+                else:
+                    line = f"{line}{' ' * (max_line_width - len(line))}"
+
                 lines.append(line)
         else:
             current_line += word + ' '
 
     if current_line:
         current_line = current_line.rstrip()
-        lines.append(f"{current_line}{' ' * (max_line_width - len(current_line))}")
+        total_padding = max_line_width - len(current_line)
+        if center_text:
+            padding = int(total_padding / 2)
+            lines.append(f"{' ' * padding}{current_line}{' ' * (total_padding - padding)}")
+        else:
+            lines.append(f"{current_line}{' ' * total_padding}")
 
     lines = '\n'.join(lines) + '\n'
 
     return lines
+
+
+def str_to_lines(input_str: str, max_line_width: int):
+    return str_list_to_lines(input_str.split(), max_line_width, True)
 
 
 def create_video_metadata_str(video_views, rating, video_creator, width):
