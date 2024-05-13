@@ -29,7 +29,7 @@ class ANSIConstants:
 
 
 class AsciiFrameConverterUtil:
-    _ASCII_CHARS = '$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjfti*()1[]{}?/\\<>\'\"|*+~=-;:,. '
+    _ASCII_CHARS = ' ░▒▓█'
 
     def __init__(self, char_aspect_ratio, should_use_color):
         self._char_aspect_ratio = char_aspect_ratio
