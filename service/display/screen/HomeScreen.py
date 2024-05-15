@@ -1,5 +1,5 @@
 from service.display.screen import BaseScreen
-from util import get_ellipsized_str, create_video_metadata_str, create_video_navigation_info_str
+from util import get_ellipsized_str, create_video_metadata_str, create_video_navigation_info_str, get_newline
 
 
 class HomeScreen(BaseScreen):
@@ -26,7 +26,7 @@ class HomeScreen(BaseScreen):
 
         if thumbnail['width'] > 5:
             # Add video title, ellipsized if necessary.
-            render_str += f" {get_ellipsized_str(title, screen_width - 2)} \n"
+            render_str += f" {get_ellipsized_str(title, screen_width - 2)} {get_newline()}"
 
             # Add video metadata.
             render_str += create_video_metadata_str('', '', creator, screen_width)

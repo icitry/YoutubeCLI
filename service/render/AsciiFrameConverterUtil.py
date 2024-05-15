@@ -1,5 +1,7 @@
 import cv2
 
+from util import get_newline
+
 
 class ANSIConstants:
     # Approximate colors, used for fast mappings.
@@ -64,7 +66,7 @@ class AsciiFrameConverterUtil:
                 else:
                     char = self._ASCII_CHARS[intensity]
                 ascii_frame += char
-            ascii_frame += '\n'
+            ascii_frame += get_newline()
 
         return {
             'content': ascii_frame,

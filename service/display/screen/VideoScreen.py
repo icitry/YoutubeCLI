@@ -1,5 +1,5 @@
 from service.display.screen import BaseScreen
-from util import get_ellipsized_str, create_video_metadata_str, str_to_lines
+from util import get_ellipsized_str, create_video_metadata_str, str_to_lines, get_newline
 
 
 class VideoScreen(BaseScreen):
@@ -18,7 +18,7 @@ class VideoScreen(BaseScreen):
             f' {status_char} '
             f'{self._PLAYBACK_CONSUMED_CHAR * consumed_len}'
             f'{self._PLAYBACK_CURSOR_CHAR}'
-            f'{self._PLAYBACK_NOT_YET_CONSUMED_CHAR * not_consumed_len} \n')
+            f'{self._PLAYBACK_NOT_YET_CONSUMED_CHAR * not_consumed_len} {get_newline()}')
 
     def render(self, data, menu_str):
         super().render(data, menu_str)
@@ -55,7 +55,7 @@ class VideoScreen(BaseScreen):
             render_str += self._create_video_status_bar(screen_width, percent_watched, is_playing)
 
             # Add video title, ellipsized if necessary.
-            render_str += f" {get_ellipsized_str(video_title, screen_width - 2)} \n"
+            render_str += f" {get_ellipsized_str(video_title, screen_width - 2)} {get_newline()}"
 
             # Add video metadata.
             render_str += create_video_metadata_str(video_views, rating, video_creator, screen_width)

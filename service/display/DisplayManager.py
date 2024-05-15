@@ -4,7 +4,7 @@ from enum import Enum
 from typing import Optional
 
 from service.display.screen import HomeScreen, CreatorScreen, SearchScreen, VideoScreen, BaseScreen
-from util import str_list_to_lines, get_menu_item_str
+from util import str_list_to_lines, get_menu_item_str, get_newline
 
 
 class ScreenTags(Enum):
@@ -77,7 +77,7 @@ class DisplayManager:
         os.system('cls' if os.name == 'nt' else 'clear')
 
         clear = '\033c'
-        sys.stdout.write(f"{clear}{msg}\n")
+        sys.stdout.write(f"{clear}{msg}{get_newline()}")
 
     def can_navigate_to_screen(self, screen_tag: ScreenTags):
         return self._registered_screens[screen_tag][1]

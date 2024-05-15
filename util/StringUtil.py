@@ -1,3 +1,6 @@
+import platform
+
+
 def get_ellipsized_str(input_str: str, max_length: int):
     if len(input_str) <= max_length:
         return input_str
@@ -48,7 +51,7 @@ def str_list_to_lines(str_list: list[str], max_line_width: int, center_text=Fals
         else:
             lines.append(f"{current_line}{' ' * total_padding}")
 
-    lines = '\n'.join(lines) + '\n'
+    lines = get_newline().join(lines) + get_newline()
 
     return lines
 
@@ -64,7 +67,7 @@ def create_video_metadata_str(video_views, rating, video_creator, width):
     video_creator = get_ellipsized_str(video_creator, video_creator_max_len)
 
     return (f" {video_creator}{' ' * (width - len(video_creator) - len(video_views) - len(rating_str) - 2)}"
-            f"{video_views}{rating_str} \n")
+            f"{video_views}{rating_str} {get_newline()}")
 
 
 def get_abbreviated_view_count(video_views, precision=2):
@@ -85,17 +88,17 @@ def create_video_navigation_info_str(width):
         return ''
 
     if width >= 15:
-        return f" [P]rev{' ' * (width - 14)}[N]ext \n"
+        return f" [P]rev{' ' * (width - 14)}[N]ext {get_newline()}"
 
-    return (f"{(width - 6) / 2}[P]rev{(width - 6) / 2}\n"
-            f"{(width - 6) / 2}[N]ext{(width - 6) / 2}\n")
+    return (f"{(width - 6) / 2}[P]rev{(width - 6) / 2}{get_newline()}"
+            f"{(width - 6) / 2}[N]ext{(width - 6) / 2}{get_newline()}")
 
 
 def get_search_bar_str(query: str, width: int):
     if width < 6:
         return ''
 
-    horizontal_margin = '-' * width + '\n'
+    horizontal_margin = '-' * width + get_newline()
     query = query.split()
 
     max_line_width = width - 4
@@ -120,6 +123,9 @@ def get_search_bar_str(query: str, width: int):
         current_line = current_line.rstrip()
         lines.append(f"| {current_line}{' ' * (max_line_width - len(current_line))} |")
 
-    lines = '\n'.join(lines) + '\n'
+    lines = get_newline().join(lines) + get_newline()
 
     return f'{horizontal_margin}{lines}{horizontal_margin}'
+
+def get_newline():
+    return '\n' if platform.system() == "Windows" else '\r\n'
