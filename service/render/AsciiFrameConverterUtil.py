@@ -31,11 +31,17 @@ class ANSIConstants:
 
 
 class AsciiFrameConverterUtil:
-    _ASCII_CHARS = '$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjfti*()1[]{}?/\\<>\'\"|*+~=-;:,. '
-
-    def __init__(self, char_aspect_ratio, should_use_color):
+    def __init__(self, char_aspect_ratio, should_use_color, should_render_high_accuracy, should_invert_colors):
         self._char_aspect_ratio = char_aspect_ratio
         self._should_use_color = should_use_color
+
+        if should_render_high_accuracy:
+            self._ASCII_CHARS = ' ░▒▓█'
+        else:
+            self._ASCII_CHARS = ' .,:;-=~+*zmwqpdbkhao#MW&8%B@$'
+
+        if should_invert_colors:
+            self._ASCII_CHARS = self._ASCII_CHARS[::-1]
 
     def _get_color_char(self, pixel_group, char):
         closest_ansi_color = ANSIConstants.closest_ansi_color(pixel_group)

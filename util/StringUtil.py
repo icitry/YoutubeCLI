@@ -127,5 +127,6 @@ def get_search_bar_str(query: str, width: int):
 
     return f'{horizontal_margin}{lines}{horizontal_margin}'
 
+
 def get_newline():
     return '\n' if platform.system() == "Windows" else '\r\n'

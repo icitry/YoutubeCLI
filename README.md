@@ -22,7 +22,8 @@ To be able to use the Google Auth side of things, you need to create and downloa
 Usage:
 ```
 usage: main.py [-h] [--scaling-factor SCALING_FACTOR] [--char-ratio CHAR_RATIO] [--max-width MAX_WIDTH]
-               [--video-url VIDEO_URL] [--subtitles] [--subtitles-lang SUBTITLES_LANG] [--colors]
+               [--video-url VIDEO_URL] [--subtitles] [--subtitles-lang SUBTITLES_LANG] [--colors] [--high-accuracy]
+               [--invert-colors]
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -40,6 +41,10 @@ optional arguments:
   --subtitles-lang SUBTITLES_LANG, -l SUBTITLES_LANG
                         The preferred language for the subtitles.
   --colors, -c          Use colors when rendering. *Warning: Performance-heavy.
+  --high-accuracy, -a   High accuracy rendering. Will use Unicode characters instead of base ASCII for rendering
+                        images.
+  --invert-colors, -i   If flag is present, colors will be inverted. To be used if background is lighter than
+                        characters.
 ```
 
 Keyboard mappings:

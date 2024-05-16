@@ -39,9 +39,19 @@ def main():
                         help="Use colors when rendering. *Warning: Performance-heavy.",
                         action='store_true'
                         )
+    parser.add_argument('--high-accuracy', '-a',
+                        help="High accuracy rendering. "
+                             "Will use Unicode characters instead of base ASCII for rendering images.",
+                        action='store_true'
+                        )
+    parser.add_argument('--invert-colors', '-i',
+                        help="If flag is present, colors will be inverted. "
+                             "To be used if background is lighter than characters.",
+                        action='store_true'
+                        )
     args = parser.parse_args()
 
-    service_locator = ServiceLocator(args.char_ratio, args.colors)
+    service_locator = ServiceLocator(args.char_ratio, args.colors, args.high_accuracy, args.invert_colors)
     cli_manager = CliManager(service_locator, args.scaling_factor, args.max_width, args.subtitles, args.subtitles_lang)
 
     try:
